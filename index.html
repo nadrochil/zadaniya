@@ -1,0 +1,1776 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Задания</title>
+</head>
+<body>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Manrope:wght@400;500;700;800&display=swap">
+<style>
+  :root{
+    --bg:#F3F4FA; --surface:rgba(255,255,255,.80); --surface-solid:#FFFFFF; --surface-2:#ECEEF7;
+    --ink:#171A28; --muted:#666B84; --line:rgba(23,25,45,.11); --line-strong:rgba(23,25,45,.20);
+    --accent:#7C3AED; --accent-2:#06B6D4; --accent-ink:#FFFFFF; --accent-soft:rgba(124,58,237,.12);
+    --accent-rgb:124,58,237; --accent-2-rgb:6,182,212;
+    --done:#0E9F6E; --done-soft:rgba(14,159,110,.14);
+    --warn-bg:rgba(217,119,6,.14); --warn-ink:#8A5B06;
+    --danger-bg:rgba(220,38,38,.12); --danger-ink:#B91C1C;
+    --pri-low:#2563EB; --pri-med:#D97706; --pri-high:#DC2626;
+    --orb-op:.30;
+    --shadow:0 1px 2px rgba(23,20,45,.05), 0 10px 28px rgba(23,20,45,.08);
+    --radius:16px;
+    --font-display:'Unbounded','Arial Black',sans-serif;
+    --font-body:'Manrope','Segoe UI',Arial,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0A0A12; --surface:rgba(26,26,38,.62); --surface-solid:#181822; --surface-2:#232331;
+      --ink:#EDEDF7; --muted:#9C9FB8; --line:rgba(255,255,255,.10); --line-strong:rgba(255,255,255,.20);
+      --accent:#A78BFA; --accent-2:#22D3EE; --accent-ink:#0B0B14; --accent-soft:rgba(167,139,250,.18);
+      --accent-rgb:167,139,250; --accent-2-rgb:34,211,238;
+      --done:#34D399; --done-soft:rgba(52,211,153,.16);
+      --warn-bg:rgba(245,158,11,.16); --warn-ink:#FBBF24;
+      --danger-bg:rgba(248,113,113,.18); --danger-ink:#FCA5A5;
+      --pri-low:#60A5FA; --pri-med:#FBBF24; --pri-high:#F87171;
+      --orb-op:.55;
+      --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 30px rgba(0,0,0,.45);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0A0A12; --surface:rgba(26,26,38,.62); --surface-solid:#181822; --surface-2:#232331;
+    --ink:#EDEDF7; --muted:#9C9FB8; --line:rgba(255,255,255,.10); --line-strong:rgba(255,255,255,.20);
+    --accent:#A78BFA; --accent-2:#22D3EE; --accent-ink:#0B0B14; --accent-soft:rgba(167,139,250,.18);
+    --accent-rgb:167,139,250; --accent-2-rgb:34,211,238;
+    --done:#34D399; --done-soft:rgba(52,211,153,.16);
+    --warn-bg:rgba(245,158,11,.16); --warn-ink:#FBBF24;
+    --danger-bg:rgba(248,113,113,.18); --danger-ink:#FCA5A5;
+    --pri-low:#60A5FA; --pri-med:#FBBF24; --pri-high:#F87171;
+    --orb-op:.55;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 30px rgba(0,0,0,.45);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{overflow-x:hidden;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.45;}
+  input,textarea,button{font-family:inherit;font-size:inherit;color:inherit;}
+  button{cursor:pointer;}
+  ::selection{background:var(--accent-soft);}
+
+  ::-webkit-scrollbar{width:10px;height:10px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background:color-mix(in srgb, var(--accent) 35%, var(--line-strong));border-radius:8px;border:2px solid transparent;background-clip:padding-box;}
+  ::-webkit-scrollbar-thumb:hover{background:color-mix(in srgb, var(--accent) 55%, var(--line-strong));background-clip:padding-box;}
+  html{scrollbar-width:thin;scrollbar-color:color-mix(in srgb, var(--accent) 40%, var(--line-strong)) transparent;}
+
+  .grain{position:fixed;inset:0;pointer-events:none;opacity:.045;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px 64px;position:relative;}
+
+  /* ambient glow */
+  .bg-glow{position:fixed;inset:0;pointer-events:none;overflow:hidden;animation:hueBreathe 42s ease-in-out infinite;}
+  .bg-glow .orb{position:absolute;border-radius:50%;filter:blur(85px);opacity:var(--orb-op);will-change:transform;}
+  .orb-a{width:560px;height:560px;top:-200px;left:-140px;background:radial-gradient(circle at 35% 35%, var(--accent), transparent 68%);animation:driftA 32s ease-in-out infinite;}
+  .orb-b{width:480px;height:480px;top:-60px;right:-160px;background:radial-gradient(circle at 60% 40%, var(--accent-2), transparent 68%);animation:driftB 38s ease-in-out infinite;}
+  .orb-c{width:380px;height:380px;top:340px;left:38%;background:radial-gradient(circle at 50% 50%, var(--accent-2), transparent 70%);opacity:calc(var(--orb-op) * .6);animation:driftC 44s ease-in-out infinite;}
+  #bgCanvas{position:absolute;inset:0;width:100%;height:100%;}
+  @keyframes driftA{
+    0%{transform:translate(0,0) scale(1) rotate(0deg);}
+    28%{transform:translate(80px,46px) scale(1.12) rotate(8deg);}
+    58%{transform:translate(30px,110px) scale(0.94) rotate(-6deg);}
+    80%{transform:translate(-40px,50px) scale(1.05) rotate(3deg);}
+    100%{transform:translate(0,0) scale(1) rotate(0deg);}
+  }
+  @keyframes driftB{
+    0%{transform:translate(0,0) scale(1) rotate(0deg);}
+    30%{transform:translate(-70px,50px) scale(1.08) rotate(-7deg);}
+    62%{transform:translate(-20px,-60px) scale(0.95) rotate(5deg);}
+    84%{transform:translate(40px,-20px) scale(1.04) rotate(-3deg);}
+    100%{transform:translate(0,0) scale(1) rotate(0deg);}
+  }
+  @keyframes driftC{
+    0%{transform:translate(0,0) scale(1);}
+    35%{transform:translate(55px,-45px) scale(1.15);}
+    70%{transform:translate(-35px,-10px) scale(0.92);}
+    100%{transform:translate(0,0) scale(1);}
+  }
+  @keyframes hueBreathe{0%{filter:hue-rotate(0deg);}50%{filter:hue-rotate(20deg);}100%{filter:hue-rotate(0deg);}}
+  @media (prefers-reduced-motion: reduce){.bg-glow{animation:none;}.bg-glow .orb{animation:none;}}
+
+  /* header */
+  header.top{position:sticky;top:0;z-index:20;background:var(--surface);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line);}
+  .top-inner{max-width:1180px;margin:0 auto;padding:16px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  .wordmark{display:flex;align-items:center;gap:11px;font-family:var(--font-display);font-weight:700;font-size:1.28rem;letter-spacing:.2px;text-wrap:balance;}
+  .wordmark .mark{width:26px;height:26px;border-radius:50%;flex:none;background:radial-gradient(circle at 35% 30%, var(--accent-2), var(--accent) 75%);box-shadow:0 0 16px 2px color-mix(in srgb, var(--accent) 55%, transparent);animation:markPulse 3.2s ease-in-out infinite;}
+  @keyframes markPulse{0%,100%{box-shadow:0 0 14px 1px color-mix(in srgb, var(--accent) 45%, transparent);}50%{box-shadow:0 0 22px 4px color-mix(in srgb, var(--accent) 70%, transparent);}}
+  @media (prefers-reduced-motion: reduce){.wordmark .mark{animation:none;}}
+  .top-spacer{flex:1;}
+  .roster{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .chip{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--surface-2);border:1px solid var(--line);font-weight:800;font-size:.76rem;color:var(--muted);}
+  .chip.me{background:linear-gradient(135deg, var(--accent), var(--accent-2));color:var(--accent-ink);border:none;cursor:pointer;width:auto;height:auto;padding:7px 14px;border-radius:20px;display:flex;gap:6px;font-family:var(--font-body);box-shadow:0 4px 16px color-mix(in srgb, var(--accent) 35%, transparent);}
+  .chip.me .lbl{font-weight:600;opacity:.95;font-size:.78rem;}
+  .btn{border:1px solid var(--line-strong);background:var(--surface-solid);color:var(--ink);padding:9px 16px;border-radius:20px;font-weight:700;font-size:.85rem;transition:box-shadow .18s,border-color .18s,transform .18s;}
+  .btn:hover{border-color:var(--accent);}
+  .btn.primary{background:linear-gradient(135deg, var(--accent), var(--accent-2));border:none;color:var(--accent-ink);box-shadow:0 6px 20px color-mix(in srgb, var(--accent) 40%, transparent);}
+  .btn.primary:hover{transform:translateY(-1px);box-shadow:0 8px 26px color-mix(in srgb, var(--accent) 55%, transparent);}
+  .btn.ghost{border-color:transparent;background:transparent;color:var(--muted);padding:6px 10px;font-weight:700;}
+  .btn.ghost:hover{color:var(--accent);}
+  .btn.small{padding:5px 10px;font-size:.76rem;border-radius:14px;}
+  .icon-btn{flex:none;width:28px;height:28px;padding:0;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.95rem;background:transparent;border:1px solid transparent;color:var(--muted);}
+  .icon-btn:hover{background:var(--surface-2);color:var(--accent);border-color:var(--line);}
+
+  .banner{max-width:1180px;margin:12px auto 0;padding:10px 16px;background:var(--warn-bg);color:var(--warn-ink);border-radius:10px;font-size:.83rem;display:none;align-items:center;gap:8px;}
+  .banner.show{display:flex;}
+
+  /* toast notifications */
+  .toast-stack{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:70;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;}
+  .toast{background:var(--surface-solid);border:1px solid var(--line-strong);color:var(--ink);padding:10px 18px;border-radius:14px;box-shadow:var(--shadow);font-size:.83rem;font-weight:600;opacity:0;transform:translateY(8px);animation:toastIn .25s ease forwards, toastOut .3s ease forwards 3.3s;max-width:88vw;text-align:center;}
+  @keyframes toastIn{to{opacity:1;transform:translateY(0);}}
+  @keyframes toastOut{to{opacity:0;transform:translateY(-6px);}}
+
+  /* toolbar */
+  .toolbar{max-width:1180px;margin:16px auto 0;padding:0 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .search-input{flex:1;min-width:140px;max-width:280px;border:1px solid var(--line-strong);background:var(--surface);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:20px;padding:8px 14px;}
+  .search-input:focus{outline:2px solid var(--accent);}
+  .filter-chip{border:1px solid var(--line-strong);background:var(--surface);color:var(--muted);padding:7px 13px;border-radius:16px;font-size:.78rem;font-weight:700;white-space:nowrap;}
+  .filter-chip:hover{border-color:var(--accent);}
+  .filter-chip.active{background:linear-gradient(135deg, var(--accent), var(--accent-2));color:var(--accent-ink);border-color:transparent;}
+  .toolbar-spacer{flex:1;}
+
+  /* add-card with template caret */
+  .add-wrap{position:relative;display:flex;}
+  #addCardBtn{border-radius:20px 0 0 20px;}
+  .caret-btn{border:1px solid var(--line-strong);border-left:1px solid color-mix(in srgb, var(--accent-ink) 30%, transparent);background:linear-gradient(135deg, var(--accent), var(--accent-2));color:var(--accent-ink);padding:9px 10px;border-radius:0 20px 20px 0;font-weight:700;}
+  .tpl-pop{position:absolute;top:calc(100% + 8px);right:0;background:var(--surface-solid);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);min-width:230px;max-height:280px;overflow-y:auto;display:none;z-index:30;padding:6px;}
+  .tpl-pop.show{display:block;}
+  .tpl-item{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:8px 10px;border-radius:8px;font-size:.83rem;}
+  .tpl-item:hover{background:var(--surface-2);}
+  .tpl-item .use{flex:1;text-align:left;background:none;border:none;color:var(--ink);font-weight:600;padding:0;}
+  .tpl-item .del{background:none;border:none;color:var(--muted);opacity:.6;font-size:.85rem;}
+  .tpl-item .del:hover{opacity:1;color:var(--accent);}
+  .tpl-empty{padding:10px;color:var(--muted);font-size:.78rem;line-height:1.4;}
+
+  /* board / kanban */
+  .board{margin-top:4px;}
+  .columns{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px;align-items:start;}
+  @media (max-width:860px){.columns{grid-template-columns:1fr;}}
+  .column{display:flex;flex-direction:column;gap:12px;min-height:60px;border-radius:var(--radius);padding:4px;transition:background .15s;}
+  .column.drag-over{background:color-mix(in srgb, var(--accent) 8%, transparent);}
+  .column-head{display:flex;align-items:center;gap:8px;padding:2px 6px;}
+  .column-head h3{font-family:var(--font-display);font-size:.8rem;font-weight:600;margin:0;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+  @keyframes countPulse{0%{transform:scale(1);}35%{transform:scale(1.35);background:var(--accent-soft);color:var(--accent);}100%{transform:scale(1);}}
+  .column-count{font-size:.68rem;color:var(--muted);background:var(--surface-2);padding:1px 7px;border-radius:8px;font-variant-numeric:tabular-nums;display:inline-block;}
+  .column-count.pulse{animation:countPulse .5s ease-out;}
+  .column-empty{border:2px dashed var(--line);border-radius:var(--radius);padding:26px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted);font-size:.8rem;}
+  .board-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin-top:20px;}
+
+  .empty{border:2px dashed var(--line-strong);border-radius:var(--radius);padding:48px 20px;text-align:center;color:var(--muted);background:var(--surface);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);margin-top:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;}
+  .empty button{margin-top:4px;}
+  .empty-illus{display:flex;flex-direction:column;align-items:center;gap:8px;opacity:.6;}
+  .empty-illus svg{opacity:.75;}
+
+  /* skeleton loading */
+  @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+  .skeleton-line{height:12px;width:74px;border-radius:6px;background:var(--surface-2);margin:2px 6px 14px;}
+  .skeleton-card{height:118px;border-radius:var(--radius);background:linear-gradient(100deg, var(--surface-2) 30%, var(--surface) 50%, var(--surface-2) 70%);background-size:200% 100%;animation:shimmer 1.6s ease-in-out infinite;}
+  @media (prefers-reduced-motion: reduce){.skeleton-card{animation:none;}}
+
+  .card.dragging{opacity:.55;transform:rotate(-1.5deg) scale(1.02);box-shadow:0 22px 46px rgba(0,0,0,.32), var(--shadow);cursor:grabbing;}
+  .card[draggable="true"]{cursor:grab;}
+
+  @keyframes cardIn{0%{opacity:0;transform:translateY(10px) scale(.97);}100%{opacity:1;transform:translateY(0) scale(1);}}
+  .card.card-enter{animation:cardIn .35s cubic-bezier(.2,.7,.3,1) both;}
+  @media (prefers-reduced-motion: reduce){.card.card-enter{animation:none;}}
+
+  @keyframes overduePulse{0%,100%{box-shadow:var(--shadow), 0 0 0 0 color-mix(in srgb, var(--danger-ink) 45%, transparent);}50%{box-shadow:var(--shadow), 0 0 14px 3px color-mix(in srgb, var(--danger-ink) 45%, transparent);}}
+  .card.overdue-glow{animation:overduePulse 2.6s ease-in-out infinite;}
+  @media (prefers-reduced-motion: reduce){.card.overdue-glow{animation:none;box-shadow:var(--shadow), 0 0 0 2px color-mix(in srgb, var(--danger-ink) 35%, transparent);}}
+
+  .card{background:var(--surface);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .2s,border-color .2s,transform .2s;}
+  .card:hover{border-color:color-mix(in srgb, var(--accent) 45%, var(--line-strong));box-shadow:var(--shadow), 0 0 0 1px color-mix(in srgb, var(--accent) 18%, transparent), 0 12px 30px color-mix(in srgb, var(--accent) 14%, transparent);}
+  .card.drop-before{box-shadow:inset 0 3px 0 0 var(--accent), var(--shadow);}
+  .card.drop-after{box-shadow:inset 0 -3px 0 0 var(--accent), var(--shadow);}
+  .card-strip{height:3px;background:linear-gradient(90deg, var(--accent), var(--accent-2));}
+  .card-head{display:flex;align-items:flex-start;gap:10px;padding:15px 16px 8px;}
+  .title-input{flex:1;border:none;background:transparent;font-family:var(--font-display);font-weight:600;font-size:1.02rem;color:var(--ink);padding:3px 4px;border-radius:6px;min-width:0;}
+  .title-input:hover{background:var(--surface-2);}
+  .title-input:focus{outline:2px solid var(--accent);background:var(--surface-2);}
+  .badge{flex:none;min-width:38px;text-align:center;padding:4px 8px;border-radius:12px;font-size:.72rem;font-weight:700;font-variant-numeric:tabular-nums;background:var(--surface-2);color:var(--muted);}
+  .badge.mid{background:var(--warn-bg);color:var(--warn-ink);}
+  .badge.done{background:var(--done-soft);color:var(--done);box-shadow:0 0 12px color-mix(in srgb, var(--done) 30%, transparent);}
+
+  .meta{padding:0 16px 10px;font-size:.76rem;color:var(--muted);}
+
+  .progress-track{height:3px;background:var(--surface-2);margin:0 16px 10px;border-radius:2px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg, var(--accent), var(--accent-2));border-radius:2px;transition:width .35s ease;}
+
+  /* indicator row (compact) */
+  .ind-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:0 16px 10px;}
+  .pri-dot{width:9px;height:9px;border-radius:50%;flex:none;}
+  .due-chip{font-size:.68rem;padding:3px 8px;border-radius:8px;background:var(--surface-2);color:var(--muted);white-space:nowrap;}
+  .due-chip.overdue{background:var(--danger-bg);color:var(--danger-ink);font-weight:700;}
+  .assignee-chip{font-size:.68rem;padding:2px 8px 2px 2px;border-radius:12px;background:var(--surface-2);color:var(--muted);display:inline-flex;align-items:center;gap:4px;}
+  .assignee-chip .av{width:15px;height:15px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:var(--accent-ink);font-size:.58rem;display:flex;align-items:center;justify-content:center;font-weight:800;flex:none;}
+  .tag-pill{font-size:.68rem;padding:3px 9px;border-radius:10px;background:var(--surface-2);color:var(--muted);white-space:nowrap;}
+  .tag-pill.editable{display:inline-flex;align-items:center;gap:5px;padding-right:5px;}
+  .tag-pill.editable button{border:none;background:transparent;color:inherit;opacity:.6;font-size:.85rem;line-height:1;padding:0 1px;}
+  .tag-pill.editable button:hover{opacity:1;}
+
+  /* property grid (detail) */
+  .prop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px 16px;padding:14px 16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .prop-field label{display:block;font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;}
+  .prop-field select, .prop-field input[type=date]{width:100%;border:1px solid var(--line-strong);background:var(--surface-2);border-radius:8px;padding:7px 8px;font-size:.85rem;color:var(--ink);}
+  .toggle-group{display:flex;gap:6px;flex-wrap:wrap;}
+  .toggle-btn{border:1px solid var(--line-strong);background:var(--surface-2);border-radius:8px;padding:6px 10px;font-size:.75rem;font-weight:700;color:var(--muted);}
+  .toggle-btn.active{border-color:transparent;}
+
+  /* tags editor (detail) */
+  .tags-row{display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px 4px;align-items:center;}
+  form.add-tag{display:inline-flex;}
+  form.add-tag input{border:1px dashed var(--line-strong);background:transparent;border-radius:10px;padding:4px 10px;font-size:.72rem;min-width:100px;color:var(--ink);}
+  form.add-tag input:focus{outline:none;border-color:var(--accent);}
+
+  /* photos (detail) */
+  .photos-row{padding:12px 16px;border-top:1px solid var(--line);}
+  .photos-row > label{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+  .photos-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+  .photo-thumb{position:relative;width:72px;height:72px;border-radius:10px;overflow:hidden;border:1px solid var(--line);}
+  .photo-thumb img{width:100%;height:100%;object-fit:cover;display:block;cursor:pointer;}
+  .photo-thumb button{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;border:none;background:rgba(0,0,0,.55);color:#fff;font-size:.7rem;line-height:1;padding:0;}
+  .add-photo-btn{display:inline-flex;align-items:center;gap:6px;margin-top:8px;}
+  .add-photo-btn input[type=file]{display:none;}
+
+  /* comments (detail) */
+  .comments-row{padding:12px 16px;border-top:1px solid var(--line);}
+  .comments-row > label{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+  .comment{padding:8px 0;border-bottom:1px solid var(--line);font-size:.85rem;}
+  .comment:last-child{border-bottom:none;}
+  .comment .who{font-weight:700;font-size:.78rem;}
+  .comment .when{color:var(--muted);font-size:.68rem;margin-left:6px;}
+  form.add-comment{display:flex;gap:8px;margin-top:8px;}
+  form.add-comment input{flex:1;border:1px solid var(--line-strong);background:var(--surface-2);border-radius:10px;padding:8px 10px;color:var(--ink);}
+  form.add-comment input:focus{outline:2px solid var(--accent);}
+
+  /* activity log (detail) — vertical timeline */
+  .activity-row{padding:6px 16px 16px;}
+  .activity-row summary{cursor:pointer;font-size:.78rem;color:var(--muted);font-weight:700;padding:6px 0;}
+  .activity-list{list-style:none;margin:10px 0 0;padding:0 0 0 16px;display:flex;flex-direction:column;gap:11px;border-left:2px solid var(--line);}
+  .activity-list li{position:relative;font-size:.76rem;color:var(--muted);line-height:1.4;}
+  .activity-list li::before{content:"";position:absolute;left:-21px;top:3px;width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--surface-solid);}
+  .activity-list b{color:var(--ink);}
+
+  /* status quick controls (compact foot) */
+  .status-controls{display:flex;align-items:center;gap:6px;}
+
+  .tasks{display:flex;flex-direction:column;padding:2px 8px;border-top:1px solid var(--line);}
+
+  @keyframes doneFlash{0%{background:color-mix(in srgb, var(--done) 35%, transparent);}100%{background:transparent;}}
+  @keyframes undoneFlash{0%{background:color-mix(in srgb, var(--muted) 25%, transparent);}100%{background:transparent;}}
+  .task.just-done, .subtask.just-done{animation:doneFlash .6s ease-out;}
+  .task.just-undone, .subtask.just-undone{animation:undoneFlash .5s ease-out;}
+
+  .task{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;}
+  .task:hover{background:var(--surface-2);}
+  .task input[type=checkbox]{width:17px;height:17px;flex:none;accent-color:var(--done);}
+  .task-text{flex:1;border:none;background:transparent;padding:4px;border-radius:6px;min-width:0;color:var(--ink);}
+  .task-text:focus{outline:2px solid var(--accent);background:var(--surface-solid);}
+  .task.done .task-text{color:var(--muted);text-decoration:line-through;}
+  .task-del{flex:none;border:none;background:transparent;color:var(--muted);opacity:.5;padding:2px 6px;border-radius:6px;font-size:.95rem;line-height:1;}
+  .task-del:hover{opacity:1;color:var(--accent);background:var(--accent-soft);}
+
+  form.add-task{display:flex;align-items:center;gap:8px;padding:8px 16px 4px;margin-top:2px;}
+  form.add-task .plus{color:var(--muted);font-weight:700;flex:none;}
+  form.add-task input{flex:1;border:none;background:transparent;padding:5px 4px;border-bottom:1px dashed var(--line-strong);min-width:0;}
+  form.add-task input:focus{outline:none;border-color:var(--accent);}
+
+  .task-block{display:flex;flex-direction:column;}
+  .sub-count{flex:none;font-size:.68rem;color:var(--muted);font-variant-numeric:tabular-nums;}
+  .subtasks{display:flex;flex-direction:column;gap:1px;margin:0 8px 6px 27px;padding-left:12px;border-left:2px solid var(--line);}
+  .subtask{display:flex;align-items:center;gap:7px;padding:4px 6px;border-radius:7px;font-size:.85rem;}
+  .subtask:hover{background:var(--surface-2);}
+  .subtask input[type=checkbox]{width:14px;height:14px;flex:none;accent-color:var(--done);}
+  .subtask-text{flex:1;border:none;background:transparent;padding:3px;border-radius:6px;min-width:0;color:var(--ink);}
+  .subtask-text:focus{outline:2px solid var(--accent);background:var(--surface-solid);}
+  .subtask.done .subtask-text{color:var(--muted);text-decoration:line-through;}
+  form.add-subtask{display:flex;align-items:center;gap:6px;padding:3px 6px 5px;}
+  form.add-subtask .sub-plus{color:var(--muted);font-size:.8rem;flex:none;}
+  form.add-subtask input{flex:1;border:none;background:transparent;padding:3px 4px;border-bottom:1px dashed var(--line);font-size:.85rem;min-width:0;}
+  form.add-subtask input:focus{outline:none;border-color:var(--accent);}
+
+  .card-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 14px 14px;margin-top:auto;flex-wrap:wrap;}
+  .foot-left, .foot-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .danger-text{color:var(--muted);}
+  .danger-text:hover{color:var(--accent);}
+  .confirm-row{display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--muted);}
+  .confirm-row .yes{background:linear-gradient(135deg, var(--accent), var(--accent-2));color:var(--accent-ink);border:none;}
+
+  /* name modal */
+  .modal-veil{position:fixed;inset:0;background:rgba(8,8,16,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;}
+  .modal-veil.show{display:flex;}
+  .modal{background:var(--surface-solid);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px;max-width:340px;width:100%;border:1px solid var(--line);}
+  .modal h2{font-family:var(--font-display);font-size:1.1rem;margin:0 0 6px;}
+  .modal p{color:var(--muted);font-size:.85rem;margin:0 0 16px;}
+  .modal input{width:100%;border:1px solid var(--line-strong);background:var(--surface-2);border-radius:10px;padding:11px 12px;margin-bottom:14px;}
+  .modal input:focus{outline:2px solid var(--accent);}
+  .modal .row{display:flex;justify-content:flex-end;gap:8px;}
+  .stat-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);font-size:.86rem;gap:10px;}
+  .stat-row:last-child{border-bottom:none;}
+  .stat-row b{font-variant-numeric:tabular-nums;flex:none;}
+
+  /* photo lightbox */
+  .lightbox-veil{background:rgba(5,5,12,.86);z-index:65;cursor:zoom-out;}
+  .lightbox-veil img{max-width:92vw;max-height:92vh;border-radius:12px;box-shadow:0 24px 60px rgba(0,0,0,.5);}
+
+  /* fullscreen detail view */
+  .detail-veil{background:var(--bg);padding:0;display:none;flex-direction:column;align-items:stretch;justify-content:flex-start;z-index:40;}
+  .detail-veil.show{display:flex;}
+  .detail-topbar{position:sticky;top:0;z-index:2;background:var(--surface);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding:14px 20px;flex:none;}
+  .detail-scroll{flex:1;overflow-y:auto;padding:28px 20px 60px;}
+  .detail-inner{max-width:680px;margin:0 auto;}
+  .detail-inner .title-input{font-size:1.55rem;font-weight:700;}
+  .detail-inner .task-text{font-size:1rem;}
+  .detail-inner .meta{font-size:.82rem;}
+  .detail-inner .tasks{padding:6px 10px;}
+  .detail-inner .subtasks{margin-left:31px;}
+
+  footer.note{max-width:1180px;margin:36px auto 0;padding:0 20px;color:var(--muted);font-size:.78rem;text-align:center;position:relative;}
+</style>
+
+<div class="bg-glow" aria-hidden="true"><div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div><canvas id="bgCanvas"></canvas></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="wordmark"><span class="mark"></span>Задания</div>
+    <div class="top-spacer"></div>
+    <div class="roster" id="roster"></div>
+    <button class="chip me" id="whoBtn" type="button" title="Сменить имя">👤 <span class="lbl" id="whoLbl">…</span></button>
+    <div class="add-wrap">
+      <button class="btn primary" id="addCardBtn" type="button">+ Новое задание</button>
+      <button class="caret-btn" id="tplCaretBtn" type="button" title="Создать из шаблона">▾</button>
+      <div class="tpl-pop" id="tplPop"></div>
+    </div>
+  </div>
+  <div class="banner" id="modeBanner">Автономный режим: карточки сохраняются только в этом браузере. Общая доска для всей команды открывается по ссылке.</div>
+</header>
+
+<div class="toolbar">
+  <input class="search-input" id="searchInput" type="text" placeholder="🔍 Поиск…" autocomplete="off">
+  <button class="filter-chip" id="filterMine" type="button">Мои</button>
+  <button class="filter-chip" id="filterOverdue" type="button">Просрочено</button>
+  <button class="filter-chip" id="filterUnfinished" type="button">Не завершено</button>
+  <div class="toolbar-spacer"></div>
+  <button class="filter-chip" id="archiveToggleBtn" type="button">Архив</button>
+  <button class="filter-chip" id="statsBtn" type="button">📊 Статистика</button>
+  <button class="filter-chip" id="exportBtn" type="button">⇩ Экспорт CSV</button>
+</div>
+
+<div class="wrap">
+  <div class="board" id="board">
+    <div class="columns">
+      <div class="column"><div class="skeleton-line"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div>
+      <div class="column"><div class="skeleton-line"></div><div class="skeleton-card"></div></div>
+      <div class="column"><div class="skeleton-line"></div><div class="skeleton-card"></div></div>
+    </div>
+  </div>
+  <footer class="note">Данные сохраняются автоматически. Просто закройте вкладку — ничего не потеряется.</footer>
+</div>
+
+<div class="modal-veil" id="nameVeil">
+  <div class="modal">
+    <h2>Как вас зовут?</h2>
+    <p>Имя будет видно команде рядом с карточками, которые вы меняете. Регистрация не нужна.</p>
+    <input id="nameInput" type="text" maxlength="40" placeholder="Например, Игорь" autocomplete="off">
+    <div class="row">
+      <button class="btn primary" id="nameSaveBtn" type="button">Продолжить</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-veil" id="tplVeil">
+  <div class="modal">
+    <h2>Сохранить как шаблон</h2>
+    <p>Название и список пунктов сохранятся — из этого шаблона можно будет быстро создавать новые карточки.</p>
+    <input id="tplNameInput" type="text" maxlength="60" placeholder="Название шаблона" autocomplete="off">
+    <div class="row">
+      <button class="btn ghost" type="button" id="tplCancelBtn">Отмена</button>
+      <button class="btn primary" id="tplSaveBtn" type="button">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-veil" id="statsVeil">
+  <div class="modal" style="max-width:380px;">
+    <h2>Статистика</h2>
+    <div id="statsBody"></div>
+    <div class="row" style="margin-top:14px;">
+      <button class="btn primary" type="button" id="statsCloseBtn">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-veil lightbox-veil" id="lightboxVeil">
+  <img id="lightboxImg" src="" alt="Фото">
+</div>
+
+<div class="modal-veil detail-veil" id="detailVeil">
+  <div class="detail-topbar">
+    <button class="btn ghost" type="button" id="detailCloseBtn">← Назад к доске</button>
+  </div>
+  <div class="detail-scroll"><div id="detailBody"></div></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var CARDS_COL = "cards", MEMBERS_COL = "members", TEMPLATES_COL = "templates";
+  var LS_NAME = "naryady_name", LS_UID = "naryady_uid", LS_CARDS = "naryady_local_cards", LS_TEMPLATES = "naryady_local_templates";
+
+  var STATUSES = ["todo", "doing", "done"];
+  var STATUS_LABELS = { todo: "Не начато", doing: "В работе", done: "Готово" };
+  var PRIORITY_LABELS = { low: "Низкий", med: "Средний", high: "Высокий" };
+  var MAX_PHOTOS = 3, PHOTO_MAX_DIM = 480, PHOTO_QUALITY = 0.5;
+
+  var db = null;
+  var mode = "loading"; // loading | db | local
+  var state = { cards: [], members: [], templates: [] };
+  var pendingDeleteCardIds = {};
+  var recentlyCreatedIds = {};
+  var recentlyToggledIds = {};
+  var prevColumnCounts = {};
+  var viewMode = "board"; // board | archive
+  var searchQuery = "";
+  var filters = { mine: false, overdue: false, unfinished: false };
+  var uid = localStorage.getItem(LS_UID);
+  if (!uid) { uid = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2)); localStorage.setItem(LS_UID, uid); }
+  var currentName = localStorage.getItem(LS_NAME) || "";
+
+  var boardEl = document.getElementById("board");
+  var rosterEl = document.getElementById("roster");
+  var whoLbl = document.getElementById("whoLbl");
+  var nameVeil = document.getElementById("nameVeil");
+  var nameInput = document.getElementById("nameInput");
+  var modeBanner = document.getElementById("modeBanner");
+  var detailVeil = document.getElementById("detailVeil");
+  var detailBody = document.getElementById("detailBody");
+  var activeDetailCardId = null;
+  var tplVeil = document.getElementById("tplVeil");
+  var tplNameInput = document.getElementById("tplNameInput");
+  var tplPopEl = document.getElementById("tplPop");
+  var tplTargetCardId = null;
+  var draggingCardId = null;
+  var lightboxVeil = document.getElementById("lightboxVeil");
+  var lightboxImg = document.getElementById("lightboxImg");
+  var toastStack = document.getElementById("toastStack");
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+
+  function timeAgo(ts){
+    if (!ts) return "";
+    var d = Date.now() - ts;
+    var m = Math.floor(d / 60000);
+    if (m < 1) return "только что";
+    if (m < 60) return m + " мин назад";
+    var h = Math.floor(m / 60);
+    if (h < 24) return h + " ч назад";
+    var days = Math.floor(h / 24);
+    if (days < 7) return days + " дн назад";
+    var dt = new Date(ts);
+    return dt.toLocaleDateString("ru-RU", {day:"numeric", month:"short"});
+  }
+
+  function initials(name){
+    return (name || "?").trim().slice(0,1).toUpperCase();
+  }
+
+  function todayStr(){ return new Date().toISOString().slice(0,10); }
+
+  function formatDate(dateStr){
+    if (!dateStr) return "";
+    return new Date(dateStr + "T00:00:00").toLocaleDateString("ru-RU", {day:"numeric", month:"short"});
+  }
+
+  function cardOrder(c){
+    return (c.order != null) ? c.order : -(c.updatedAt || c.createdAt || 0);
+  }
+
+  function isOverdue(c){
+    if (!c.dueDate || c.status === "done") return false;
+    return c.dueDate < todayStr();
+  }
+
+  function hasUnfinished(c){
+    var tasks = c.tasks || [];
+    return tasks.length > 0 && tasks.some(function(t){ return !t.done; });
+  }
+
+  function cardMatchesFilters(c){
+    if (searchQuery){
+      var hay = ((c.title||"") + " " + (c.tags||[]).join(" ") + " " + (c.assignee||"") + " " + (c.tasks||[]).map(function(t){ return t.text; }).join(" ")).toLowerCase();
+      if (hay.indexOf(searchQuery.toLowerCase()) === -1) return false;
+    }
+    if (filters.mine && c.assignee !== currentName) return false;
+    if (filters.overdue && !isOverdue(c)) return false;
+    if (filters.unfinished && !hasUnfinished(c)) return false;
+    return true;
+  }
+
+  function visibleCards(){
+    return state.cards.filter(function(c){ return !c.archived && cardMatchesFilters(c); });
+  }
+
+  function archivedCards(){
+    return state.cards.filter(function(c){ return c.archived; });
+  }
+
+  function hashHue(str){
+    var h = 0;
+    str = str || "?";
+    for (var i = 0; i < str.length; i++){ h = (h * 31 + str.charCodeAt(i)) >>> 0; }
+    return h % 360;
+  }
+  function personColor(name){ return "hsl(" + hashHue(name) + " 68% 52%)"; }
+  function personColorSoft(name){ return "hsl(" + hashHue(name) + " 60% 42%)"; }
+
+  function emptyStateHtml(text, big){
+    var size = big ? 46 : 30;
+    return '<div class="empty-illus">' +
+      '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M3 7l3-4h12l3 4"></path><line x1="9" y1="12" x2="15" y2="12"></line></svg>' +
+      "<span>" + text + "</span>" +
+    "</div>";
+  }
+
+  /* ---------- living background: drifting dust ---------- */
+
+  function initParticles(){
+    var canvas = document.getElementById("bgCanvas");
+    if (!canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext("2d");
+    var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var W = 0, H = 0, DPR = 1;
+    var particles = [];
+    var target = { x: 0, y: 0 };
+    var cam = { x: 0, y: 0 };
+    var raf = null;
+    var rgbA = "167,139,250", rgbB = "34,211,238";
+
+    function readColors(){
+      var cs = getComputedStyle(document.documentElement);
+      var a = cs.getPropertyValue("--accent-rgb").trim();
+      var b = cs.getPropertyValue("--accent-2-rgb").trim();
+      if (a) rgbA = a;
+      if (b) rgbB = b;
+    }
+
+    function resize(){
+      W = window.innerWidth; H = window.innerHeight;
+      DPR = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(W * DPR);
+      canvas.height = Math.floor(H * DPR);
+      canvas.style.width = W + "px";
+      canvas.style.height = H + "px";
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      seedParticles();
+    }
+
+    function seedParticles(){
+      var count = Math.max(28, Math.min(80, Math.round((W * H) / 24000)));
+      particles = [];
+      for (var i = 0; i < count; i++){
+        particles.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          vx: (Math.random() - 0.5) * 0.10,
+          vy: (Math.random() - 0.5) * 0.10,
+          r: 1 + Math.random() * 1.6,
+          hue: Math.random() < 0.5 ? rgbA : rgbB,
+          tw: Math.random() * Math.PI * 2
+        });
+      }
+    }
+
+    function drawStatic(){
+      readColors();
+      resize();
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(function(p){
+        ctx.beginPath();
+        ctx.fillStyle = "rgba(" + p.hue + ",0.55)";
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    var t = 0;
+    function step(){
+      t += 1;
+      cam.x += (target.x - cam.x) * 0.05;
+      cam.y += (target.y - cam.y) * 0.05;
+      ctx.clearRect(0, 0, W, H);
+      ctx.save();
+      ctx.translate(cam.x, cam.y);
+
+      for (var i = 0; i < particles.length; i++){
+        var p = particles[i];
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < -20) p.x = W + 20; if (p.x > W + 20) p.x = -20;
+        if (p.y < -20) p.y = H + 20; if (p.y > H + 20) p.y = -20;
+        var alpha = 0.28 + 0.30 * Math.sin(t * 0.012 + p.tw);
+        ctx.beginPath();
+        ctx.fillStyle = "rgba(" + p.hue + "," + Math.max(0, alpha) + ")";
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      var threshold = 110;
+      for (var a = 0; a < particles.length; a++){
+        for (var b = a + 1; b < particles.length; b++){
+          var dx = particles[a].x - particles[b].x, dy = particles[a].y - particles[b].y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < threshold){
+            ctx.beginPath();
+            ctx.strokeStyle = "rgba(" + rgbA + "," + ((1 - dist / threshold) * 0.10) + ")";
+            ctx.lineWidth = 1;
+            ctx.moveTo(particles[a].x, particles[a].y);
+            ctx.lineTo(particles[b].x, particles[b].y);
+            ctx.stroke();
+          }
+        }
+      }
+      ctx.restore();
+      raf = requestAnimationFrame(step);
+    }
+
+    function start(){
+      if (raf) return;
+      raf = requestAnimationFrame(step);
+    }
+    function stop(){
+      if (raf) cancelAnimationFrame(raf);
+      raf = null;
+    }
+
+    window.addEventListener("resize", function(){ readColors(); resize(); }, { passive: true });
+    window.addEventListener("pointermove", function(e){
+      target.x = (e.clientX / Math.max(1, W) - 0.5) * 26;
+      target.y = (e.clientY / Math.max(1, H) - 0.5) * 26;
+    }, { passive: true });
+    document.addEventListener("visibilitychange", function(){
+      if (document.hidden) stop(); else if (!reduced) start();
+    });
+    if (window.matchMedia){
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", readColors);
+    }
+
+    readColors();
+    resize();
+    if (reduced) { drawStatic(); } else { start(); }
+  }
+
+  /* ---------- name / identity ---------- */
+
+  function openNameModal(prefill){
+    nameInput.value = prefill || "";
+    nameVeil.classList.add("show");
+    setTimeout(function(){ nameInput.focus(); }, 30);
+  }
+  function closeNameModal(){ nameVeil.classList.remove("show"); }
+
+  document.getElementById("whoBtn").addEventListener("click", function(){ openNameModal(currentName); });
+  document.getElementById("nameSaveBtn").addEventListener("click", saveNameFromModal);
+  nameInput.addEventListener("keydown", function(e){ if (e.key === "Enter") saveNameFromModal(); });
+  nameVeil.addEventListener("click", function(e){ if (e.target === nameVeil && currentName) closeNameModal(); });
+
+  function saveNameFromModal(){
+    var v = nameInput.value.trim();
+    if (!v) { nameInput.focus(); return; }
+    currentName = v.slice(0, 40);
+    localStorage.setItem(LS_NAME, currentName);
+    whoLbl.textContent = currentName;
+    closeNameModal();
+    touchMembership();
+  }
+
+  function touchMembership(){
+    whoLbl.textContent = currentName || "…";
+    if (!db) return;
+    var ref = db.collection(MEMBERS_COL).doc(uid);
+    ref.update({ name: currentName, lastSeenAt: Date.now() }).catch(function(){
+      ref.set({ name: currentName, joinedAt: Date.now(), lastSeenAt: Date.now() }).catch(function(){});
+    });
+  }
+
+  function renderRoster(){
+    if (mode === "local"){ rosterEl.innerHTML = ""; return; }
+    var html = state.members.slice(0, 10).map(function(m){
+      return '<span class="chip" style="background:' + personColor(m.name) + ';color:#fff;border-color:transparent;" title="' + esc(m.name || "?") + '">' + esc(initials(m.name)) + "</span>";
+    }).join("");
+    rosterEl.innerHTML = html;
+  }
+
+  /* ---------- data layer ---------- */
+
+  function loadLocalCards(){
+    try { state.cards = JSON.parse(localStorage.getItem(LS_CARDS) || "[]"); }
+    catch(e){ state.cards = []; }
+  }
+  function saveLocalCards(){
+    localStorage.setItem(LS_CARDS, JSON.stringify(state.cards));
+  }
+  function loadLocalTemplates(){
+    try { state.templates = JSON.parse(localStorage.getItem(LS_TEMPLATES) || "[]"); }
+    catch(e){ state.templates = []; }
+  }
+  function saveLocalTemplates(){
+    localStorage.setItem(LS_TEMPLATES, JSON.stringify(state.templates));
+  }
+
+  function newTaskId(){
+    return crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2);
+  }
+
+  function createCard(overrides){
+    var now = Date.now();
+    var base = {
+      title: "Новое задание", status: "todo", order: -now, tasks: [],
+      assignee: null, dueDate: null, priority: null, tags: [], archived: false,
+      repeat: "none", comments: [], activity: [], photos: [],
+      createdBy: currentName, createdAt: now, updatedBy: currentName, updatedAt: now
+    };
+    var body = Object.assign(base, overrides || {});
+    if (mode === "db"){
+      db.collection(CARDS_COL).add(body).then(function(ref){
+        recentlyCreatedIds[ref.id] = true;
+        focusTitleWhenReady(ref.id);
+      }).catch(function(){ showTransientError("Не удалось создать карточку."); });
+    } else {
+      var id = newTaskId();
+      recentlyCreatedIds[id] = true;
+      state.cards.unshift(Object.assign({id:id}, body));
+      saveLocalCards();
+      renderBoard();
+      focusTitleWhenReady(id);
+    }
+  }
+
+  function createCardFromTemplate(tpl){
+    var tasks = (tpl.tasks || []).map(function(t){ return { id: newTaskId(), text: t.text, done: false, subtasks: [] }; });
+    createCard({ title: tpl.name, tasks: tasks });
+    closeTplPopover();
+  }
+
+  function saveTemplate(name, tasks){
+    var tpl = { name: name, tasks: (tasks || []).map(function(t){ return { text: t.text }; }), createdAt: Date.now() };
+    if (mode === "db"){
+      db.collection(TEMPLATES_COL).add(tpl).catch(function(){ showTransientError("Не удалось сохранить шаблон."); });
+    } else {
+      tpl.id = newTaskId();
+      state.templates.push(tpl);
+      saveLocalTemplates();
+      renderTplPopover();
+    }
+  }
+
+  function deleteTemplate(tplId){
+    if (mode === "db"){
+      db.collection(TEMPLATES_COL).doc(tplId).delete().catch(function(){});
+    } else {
+      state.templates = state.templates.filter(function(t){ return t.id !== tplId; });
+      saveLocalTemplates();
+      renderTplPopover();
+    }
+  }
+
+  function focusTitleWhenReady(cardId, attempts){
+    attempts = attempts || 0;
+    var el = document.querySelector('[data-edit-key="' + cardId + ':title"]');
+    if (el){ el.focus(); el.select(); return; }
+    if (attempts < 20) setTimeout(function(){ focusTitleWhenReady(cardId, attempts+1); }, 60);
+  }
+
+  function persistCard(cardId, patch, activityText){
+    var c = getCard(cardId);
+    if (activityText && c){
+      var entry = { id: newTaskId(), who: currentName, what: activityText, at: Date.now() };
+      var log = (c.activity || []).concat([entry]);
+      if (log.length > 30) log = log.slice(log.length - 30);
+      patch.activity = log;
+    }
+    patch.updatedBy = currentName;
+    patch.updatedAt = Date.now();
+    if (mode === "db"){
+      db.collection(CARDS_COL).doc(cardId).update(patch).catch(function(){ showTransientError("Не удалось сохранить изменения."); });
+    } else {
+      if (!c) return;
+      Object.assign(c, patch);
+      saveLocalCards();
+      renderBoard();
+    }
+  }
+
+  function deleteCard(cardId){
+    if (mode === "db"){
+      db.collection(CARDS_COL).doc(cardId).delete().catch(function(){ showTransientError("Не удалось удалить карточку."); });
+    } else {
+      state.cards = state.cards.filter(function(c){ return c.id !== cardId; });
+      saveLocalCards();
+      renderBoard();
+    }
+  }
+
+  function getCard(cardId){ return state.cards.find(function(c){ return c.id === cardId; }); }
+
+  function setTitle(cardId, title){
+    title = title.trim();
+    if (!title) title = "Без названия";
+    var c = getCard(cardId);
+    if (c && c.title === title) return;
+    persistCard(cardId, { title: title }, "изменил название");
+  }
+
+  function addTask(cardId, text){
+    text = text.trim();
+    if (!text) return;
+    var c = getCard(cardId);
+    if (!c) return;
+    var tasks = (c.tasks || []).slice();
+    tasks.push({ id: newTaskId(), text: text, done: false, createdBy: currentName, createdAt: Date.now(), subtasks: [] });
+    persistCard(cardId, { tasks: tasks }, "добавил пункт «" + text + "»");
+  }
+
+  function toggleTask(cardId, taskId){
+    var c = getCard(cardId);
+    if (!c) return;
+    var target = (c.tasks || []).find(function(t){ return t.id === taskId; });
+    var willBeDone = target ? !target.done : true;
+    recentlyToggledIds[taskId] = willBeDone ? "done" : "undone";
+    var tasks = (c.tasks || []).map(function(t){
+      return t.id === taskId ? Object.assign({}, t, { done: !t.done }) : t;
+    });
+    persistCard(cardId, { tasks: tasks }, target ? ((willBeDone ? "отметил выполненным «" : "снял отметку с «") + target.text + "»") : null);
+  }
+
+  function editTaskText(cardId, taskId, text){
+    text = text.trim();
+    var c = getCard(cardId);
+    if (!c) return;
+    var existing = (c.tasks || []).find(function(t){ return t.id === taskId; });
+    if (!existing) return;
+    if (!text){
+      deleteTask(cardId, taskId);
+      return;
+    }
+    if (existing.text === text) return;
+    var tasks = c.tasks.map(function(t){ return t.id === taskId ? Object.assign({}, t, { text: text }) : t; });
+    persistCard(cardId, { tasks: tasks }, "изменил пункт «" + existing.text + "»");
+  }
+
+  function deleteTask(cardId, taskId){
+    var c = getCard(cardId);
+    if (!c) return;
+    var existing = (c.tasks || []).find(function(t){ return t.id === taskId; });
+    var tasks = (c.tasks || []).filter(function(t){ return t.id !== taskId; });
+    persistCard(cardId, { tasks: tasks }, existing ? ("удалил пункт «" + existing.text + "»") : null);
+  }
+
+  function mapTask(c, taskId, fn, activityText){
+    var tasks = (c.tasks || []).map(function(t){ return t.id === taskId ? fn(t) : t; });
+    persistCard(c.id, { tasks: tasks }, activityText);
+  }
+
+  function addSubtask(cardId, taskId, text){
+    text = text.trim();
+    if (!text) return;
+    var c = getCard(cardId);
+    if (!c) return;
+    mapTask(c, taskId, function(t){
+      var subs = (t.subtasks || []).slice();
+      subs.push({ id: newTaskId(), text: text, done: false });
+      return Object.assign({}, t, { subtasks: subs });
+    }, "добавил подпункт «" + text + "»");
+  }
+
+  function toggleSubtask(cardId, taskId, subId){
+    var c = getCard(cardId);
+    if (!c) return;
+    var task = (c.tasks || []).find(function(t){ return t.id === taskId; });
+    var existing = task ? (task.subtasks || []).find(function(s){ return s.id === subId; }) : null;
+    recentlyToggledIds[subId] = existing && !existing.done ? "done" : (existing ? "undone" : "done");
+    mapTask(c, taskId, function(t){
+      var subs = (t.subtasks || []).map(function(s){ return s.id === subId ? Object.assign({}, s, { done: !s.done }) : s; });
+      return Object.assign({}, t, { subtasks: subs });
+    });
+  }
+
+  function editSubtaskText(cardId, taskId, subId, text){
+    text = text.trim();
+    var c = getCard(cardId);
+    if (!c) return;
+    var task = (c.tasks || []).find(function(t){ return t.id === taskId; });
+    if (!task) return;
+    var existing = (task.subtasks || []).find(function(s){ return s.id === subId; });
+    if (!existing) return;
+    if (!text){ deleteSubtask(cardId, taskId, subId); return; }
+    if (existing.text === text) return;
+    mapTask(c, taskId, function(t){
+      var subs = (t.subtasks || []).map(function(s){ return s.id === subId ? Object.assign({}, s, { text: text }) : s; });
+      return Object.assign({}, t, { subtasks: subs });
+    });
+  }
+
+  function deleteSubtask(cardId, taskId, subId){
+    var c = getCard(cardId);
+    if (!c) return;
+    mapTask(c, taskId, function(t){
+      return Object.assign({}, t, { subtasks: (t.subtasks || []).filter(function(s){ return s.id !== subId; }) });
+    });
+  }
+
+  /* ---------- card-level properties ---------- */
+
+  function moveToStatus(cardId, status){
+    var c = getCard(cardId);
+    if (!c) return;
+    var siblings = visibleCards().filter(function(x){ return (x.status||"todo") === status && x.id !== cardId; });
+    var minOrder = siblings.length ? Math.min.apply(null, siblings.map(cardOrder)) : -Date.now();
+    var text = (c.status||"todo") === status ? null : ("переместил в «" + STATUS_LABELS[status] + "»");
+    persistCard(cardId, { status: status, order: minOrder - 1 }, text);
+  }
+
+  function moveStatusDelta(cardId, delta){
+    var c = getCard(cardId);
+    if (!c) return;
+    var idx = STATUSES.indexOf(c.status || "todo");
+    var next = STATUSES[Math.min(STATUSES.length - 1, Math.max(0, idx + delta))];
+    moveToStatus(cardId, next);
+  }
+
+  function midpointOrder(prev, next){
+    var a = prev ? cardOrder(prev) : (next ? cardOrder(next) - 2000 : -Date.now());
+    var b = next ? cardOrder(next) : (prev ? cardOrder(prev) + 2000 : Date.now());
+    return (a + b) / 2;
+  }
+
+  function handleCardDrop(cardId, status, e){
+    var c = getCard(cardId);
+    if (!c) return;
+    var targetEl = e.target.closest && e.target.closest(".card[data-card-id]");
+    var targetId = targetEl ? targetEl.getAttribute("data-card-id") : null;
+    var siblings = visibleCards().filter(function(x){ return (x.status||"todo") === status && x.id !== cardId; })
+      .sort(function(a,b){ return cardOrder(a) - cardOrder(b); });
+    var newOrder;
+    if (targetId && targetId !== cardId && targetEl){
+      var idx = siblings.findIndex(function(x){ return x.id === targetId; });
+      var rect = targetEl.getBoundingClientRect();
+      var before = (e.clientY - rect.top) < rect.height / 2;
+      var prev = before ? siblings[idx-1] : siblings[idx];
+      var next = before ? siblings[idx] : siblings[idx+1];
+      newOrder = midpointOrder(prev, next);
+    } else {
+      var last = siblings[siblings.length - 1];
+      newOrder = last ? cardOrder(last) + 1000 : -Date.now();
+    }
+    var text = (c.status||"todo") === status ? "изменил порядок карточки" : ("переместил в «" + STATUS_LABELS[status] + "»");
+    persistCard(cardId, { status: status, order: newOrder }, text);
+  }
+
+  function setArchived(cardId, val){
+    persistCard(cardId, { archived: val }, val ? "переместил в архив" : "восстановил из архива");
+    if (val && activeDetailCardId === cardId) closeDetail();
+  }
+
+  function setPriority(cardId, p){
+    persistCard(cardId, { priority: p || null }, p ? ("поставил приоритет: " + PRIORITY_LABELS[p]) : "снял приоритет");
+  }
+
+  function setAssignee(cardId, name){
+    persistCard(cardId, { assignee: name || null }, name ? ("назначил ответственным " + name) : "снял ответственного");
+  }
+
+  function setDueDate(cardId, val){
+    persistCard(cardId, { dueDate: val || null }, val ? ("поставил срок: " + formatDate(val)) : "убрал срок");
+  }
+
+  function setRepeat(cardId, val){
+    persistCard(cardId, { repeat: val }, (val && val !== "none") ? "включил повтор" : "выключил повтор");
+  }
+
+  function addTag(cardId, text){
+    text = text.trim();
+    if (!text) return;
+    var c = getCard(cardId);
+    if (!c) return;
+    var tags = (c.tags || []).slice();
+    if (tags.indexOf(text) === -1) tags.push(text);
+    persistCard(cardId, { tags: tags }, "добавил тег «" + text + "»");
+  }
+
+  function removeTag(cardId, tag){
+    var c = getCard(cardId);
+    if (!c) return;
+    var tags = (c.tags || []).filter(function(t){ return t !== tag; });
+    persistCard(cardId, { tags: tags }, "удалил тег «" + tag + "»");
+  }
+
+  function addComment(cardId, text){
+    text = text.trim();
+    if (!text) return;
+    var c = getCard(cardId);
+    if (!c) return;
+    var comments = (c.comments || []).slice();
+    comments.push({ id: newTaskId(), author: currentName, text: text, at: Date.now() });
+    if (comments.length > 200) comments = comments.slice(comments.length - 200);
+    persistCard(cardId, { comments: comments });
+  }
+
+  function addInterval(dateStr, repeat){
+    var d = new Date(dateStr + "T00:00:00");
+    if (repeat === "daily") d.setDate(d.getDate() + 1);
+    else if (repeat === "weekly") d.setDate(d.getDate() + 7);
+    else if (repeat === "monthly") d.setMonth(d.getMonth() + 1);
+    return d.toISOString().slice(0,10);
+  }
+
+  function repeatCard(cardId){
+    var c = getCard(cardId);
+    if (!c) return;
+    var tasks = (c.tasks || []).map(function(t){
+      return Object.assign({}, t, { done: false, subtasks: (t.subtasks||[]).map(function(s){ return Object.assign({}, s, { done: false }); }) });
+    });
+    var newDue = c.dueDate ? addInterval(c.dueDate, c.repeat) : null;
+    persistCard(cardId, { tasks: tasks, status: "todo", order: -Date.now(), dueDate: newDue }, "повторил задание на новый период");
+  }
+
+  function handlePhotoInput(cardId, inputEl){
+    var file = inputEl.files && inputEl.files[0];
+    inputEl.value = "";
+    if (!file) return;
+    var c = getCard(cardId);
+    if (!c) return;
+    if ((c.photos||[]).length >= MAX_PHOTOS){ showTransientError("Максимум " + MAX_PHOTOS + " фото на карточку."); return; }
+    var reader = new FileReader();
+    reader.onload = function(){
+      var img = new Image();
+      img.onload = function(){
+        var scale = Math.min(1, PHOTO_MAX_DIM / Math.max(img.width, img.height));
+        var w = Math.round(img.width * scale), h = Math.round(img.height * scale);
+        var canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
+        var dataUrl = canvas.toDataURL("image/jpeg", PHOTO_QUALITY);
+        var cc = getCard(cardId);
+        if (!cc) return;
+        var photos = (cc.photos || []).slice();
+        photos.push(dataUrl);
+        persistCard(cardId, { photos: photos }, "добавил фото");
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removePhoto(cardId, idx){
+    var c = getCard(cardId);
+    if (!c) return;
+    var photos = (c.photos || []).slice();
+    photos.splice(idx, 1);
+    persistCard(cardId, { photos: photos }, "удалил фото");
+  }
+
+  function showTransientError(msg){
+    var el = document.createElement("div");
+    el.className = "toast";
+    el.textContent = msg;
+    toastStack.appendChild(el);
+    setTimeout(function(){ if (el.parentNode) el.parentNode.removeChild(el); }, 3700);
+  }
+
+  /* ---------- rendering ---------- */
+
+  function captureFocus(container){
+    var el = document.activeElement;
+    if (!el || !container || !container.contains(el) || !el.dataset || !el.dataset.editKey) return null;
+    return { key: el.dataset.editKey, value: el.value, s: el.selectionStart, e: el.selectionEnd };
+  }
+  function restoreFocus(container, c){
+    if (!c || !container) return;
+    var el = container.querySelector('[data-edit-key="' + c.key.replace(/"/g,'\\"') + '"]');
+    if (!el) return;
+    el.focus();
+    try { el.setSelectionRange(c.s, c.e); } catch(e){}
+  }
+
+  function badgeHtml(tasks){
+    var total = tasks.length;
+    if (!total) return '<span class="badge">—</span>';
+    var done = tasks.filter(function(t){ return t.done; }).length;
+    var cls = done === total ? "done" : (done > 0 ? "mid" : "");
+    return '<span class="badge ' + cls + '">' + done + "/" + total + "</span>";
+  }
+
+  function subCountHtml(t){
+    var subs = t.subtasks || [];
+    if (!subs.length) return "";
+    var done = subs.filter(function(s){ return s.done; }).length;
+    return '<span class="sub-count">' + done + "/" + subs.length + "</span>";
+  }
+
+  function flashClass(id){
+    var v = recentlyToggledIds[id];
+    if (!v) return "";
+    return v === "done" ? " just-done" : " just-undone";
+  }
+
+  function taskHtml(cardId, t){
+    var subs = t.subtasks || [];
+    var subsHtml = subs.map(function(s){
+      return '<div class="subtask ' + (s.done ? "done" : "") + flashClass(s.id) + '">' +
+        '<input type="checkbox" data-action="toggle-subtask" data-card="' + cardId + '" data-task="' + t.id + '" data-sub="' + s.id + '" ' + (s.done ? "checked" : "") + '>' +
+        '<input class="subtask-text" type="text" value="' + esc(s.text) + '" data-edit-key="' + cardId + ':sub:' + t.id + ':' + s.id + '" data-action="edit-subtask" data-card="' + cardId + '" data-task="' + t.id + '" data-sub="' + s.id + '">' +
+        '<button class="task-del" type="button" data-action="delete-subtask" data-card="' + cardId + '" data-task="' + t.id + '" data-sub="' + s.id + '" title="Удалить подпункт">×</button>' +
+      "</div>";
+    }).join("");
+
+    return '<div class="task-block">' +
+      '<div class="task ' + (t.done ? "done" : "") + flashClass(t.id) + '">' +
+        '<input type="checkbox" data-action="toggle-task" data-card="' + cardId + '" data-task="' + t.id + '" ' + (t.done ? "checked" : "") + '>' +
+        '<input class="task-text" type="text" value="' + esc(t.text) + '" data-edit-key="' + cardId + ':task:' + t.id + '" data-action="edit-task" data-card="' + cardId + '" data-task="' + t.id + '">' +
+        subCountHtml(t) +
+        '<button class="task-del" type="button" data-action="delete-task" data-card="' + cardId + '" data-task="' + t.id + '" title="Удалить пункт">×</button>' +
+      "</div>" +
+      '<div class="subtasks">' + subsHtml +
+        '<form class="add-subtask" data-action="add-subtask-form" data-card="' + cardId + '" data-task="' + t.id + '">' +
+          '<span class="sub-plus">↳</span>' +
+          '<input type="text" placeholder="Добавить подпункт…" autocomplete="off">' +
+        "</form>" +
+      "</div>" +
+    "</div>";
+  }
+
+  function membersForAssign(){
+    var names = {};
+    if (mode === "db"){ state.members.forEach(function(m){ if (m.name) names[m.name] = true; }); }
+    if (currentName) names[currentName] = true;
+    state.cards.forEach(function(c){ if (c.assignee) names[c.assignee] = true; });
+    return Object.keys(names).sort();
+  }
+
+  function indicatorRowHtml(c){
+    var bits = [];
+    if (c.priority) bits.push('<span class="pri-dot" style="background:var(--pri-' + c.priority + ')" title="Приоритет: ' + esc(PRIORITY_LABELS[c.priority]) + '"></span>');
+    if (c.dueDate) bits.push('<span class="due-chip' + (isOverdue(c) ? ' overdue' : '') + '">' + (isOverdue(c) ? '⚠ ' : '') + esc(formatDate(c.dueDate)) + '</span>');
+    if (c.assignee) bits.push('<span class="assignee-chip"><span class="av" style="background:' + personColor(c.assignee) + '">' + esc(initials(c.assignee)) + '</span>' + esc(c.assignee) + '</span>');
+    (c.tags || []).forEach(function(tag){ bits.push('<span class="tag-pill">' + esc(tag) + '</span>'); });
+    if (!bits.length) return "";
+    return '<div class="ind-row">' + bits.join("") + '</div>';
+  }
+
+  function propGridHtml(c){
+    var statusBtns = STATUSES.map(function(s){
+      var active = (c.status || "todo") === s;
+      return '<button type="button" class="toggle-btn' + (active ? ' active' : '') + '"' +
+        (active ? ' style="background:linear-gradient(135deg,var(--accent),var(--accent-2));color:var(--accent-ink);"' : '') +
+        ' data-action="set-status" data-card="' + c.id + '" data-value="' + s + '">' + STATUS_LABELS[s] + '</button>';
+    }).join("");
+
+    var priBtns = ["", "low", "med", "high"].map(function(p){
+      var active = (c.priority || "") === p;
+      var label = p ? PRIORITY_LABELS[p] : "—";
+      return '<button type="button" class="toggle-btn' + (active ? ' active' : '') + '"' +
+        (active && p ? (' style="background:var(--pri-' + p + ');color:#fff;"') : '') +
+        ' data-action="set-priority" data-card="' + c.id + '" data-value="' + p + '">' + label + '</button>';
+    }).join("");
+
+    var assigneeOptions = '<option value="">— не назначен —</option>' +
+      membersForAssign().map(function(name){
+        return '<option value="' + esc(name) + '"' + (c.assignee === name ? ' selected' : '') + '>' + esc(name) + '</option>';
+      }).join("");
+
+    var repeatOptions = [["none","Без повтора"],["daily","Ежедневно"],["weekly","Еженедельно"],["monthly","Ежемесячно"]].map(function(r){
+      return '<option value="' + r[0] + '"' + ((c.repeat || "none") === r[0] ? ' selected' : '') + '>' + r[1] + '</option>';
+    }).join("");
+
+    return '<div class="prop-grid">' +
+      '<div class="prop-field" style="grid-column:1/-1"><label>Статус</label><div class="toggle-group">' + statusBtns + '</div></div>' +
+      '<div class="prop-field"><label>Приоритет</label><div class="toggle-group">' + priBtns + '</div></div>' +
+      '<div class="prop-field"><label>Ответственный</label><select data-action="set-assignee" data-card="' + c.id + '">' + assigneeOptions + '</select></div>' +
+      '<div class="prop-field"><label>Срок</label><input type="date" value="' + (c.dueDate || "") + '" data-action="set-due" data-card="' + c.id + '"></div>' +
+      '<div class="prop-field"><label>Повтор</label><select data-action="set-repeat" data-card="' + c.id + '">' + repeatOptions + '</select></div>' +
+    '</div>';
+  }
+
+  function tagsEditorHtml(c){
+    var pills = (c.tags || []).map(function(tag){
+      return '<span class="tag-pill editable">' + esc(tag) + '<button type="button" data-action="remove-tag" data-card="' + c.id + '" data-value="' + esc(tag) + '" title="Удалить тег">×</button></span>';
+    }).join("");
+    return '<div class="tags-row">' + pills +
+      '<form class="add-tag" data-action="add-tag-form" data-card="' + c.id + '"><input type="text" placeholder="+ тег" autocomplete="off" maxlength="24"></form>' +
+    '</div>';
+  }
+
+  function photosHtml(c){
+    var photos = c.photos || [];
+    var thumbs = photos.map(function(src, idx){
+      return '<div class="photo-thumb"><img src="' + src + '" alt="" data-action="open-photo"><button type="button" data-action="remove-photo" data-card="' + c.id + '" data-value="' + idx + '" title="Удалить фото">×</button></div>';
+    }).join("");
+    var canAdd = photos.length < MAX_PHOTOS;
+    return '<div class="photos-row"><label>Фото (' + photos.length + '/' + MAX_PHOTOS + ')</label>' +
+      '<div class="photos-grid">' + thumbs + '</div>' +
+      (canAdd ? ('<label class="btn small add-photo-btn">📷 Добавить фото<input type="file" accept="image/*" data-action="add-photo" data-card="' + c.id + '"></label>') : "") +
+    '</div>';
+  }
+
+  function commentsHtml(c){
+    var comments = c.comments || [];
+    var list = comments.map(function(cm){
+      return '<div class="comment"><span class="who" style="color:' + personColorSoft(cm.author || "?") + '">' + esc(cm.author || "?") + '</span><span class="when">' + timeAgo(cm.at) + '</span><div>' + esc(cm.text) + '</div></div>';
+    }).join("");
+    return '<div class="comments-row"><label>Комментарии (' + comments.length + ')</label>' + list +
+      '<form class="add-comment" data-action="add-comment-form" data-card="' + c.id + '"><input type="text" placeholder="Написать комментарий…" autocomplete="off"><button class="btn small primary" type="submit">Отпр.</button></form>' +
+    '</div>';
+  }
+
+  function activityHtml(c){
+    var log = (c.activity || []).slice().reverse();
+    if (!log.length) return "";
+    var items = log.map(function(a){
+      return '<li><b>' + esc(a.who || "?") + '</b> ' + esc(a.what) + ' · ' + timeAgo(a.at) + '</li>';
+    }).join("");
+    return '<details class="activity-row"><summary>История изменений (' + log.length + ')</summary><ul class="activity-list">' + items + '</ul></details>';
+  }
+
+  function statusControlsHtml(c){
+    var idx = STATUSES.indexOf(c.status || "todo");
+    var prevDisabled = idx <= 0 ? "disabled" : "";
+    var nextDisabled = idx >= STATUSES.length - 1 ? "disabled" : "";
+    return '<div class="status-controls">' +
+      '<button class="icon-btn" type="button" data-action="status-prev" data-card="' + c.id + '" ' + prevDisabled + ' title="Назад">‹</button>' +
+      '<button class="icon-btn" type="button" data-action="status-next" data-card="' + c.id + '" ' + nextDisabled + ' title="Вперёд">›</button>' +
+    '</div>';
+  }
+
+  function progressBarHtml(tasks){
+    if (!tasks.length) return "";
+    var done = tasks.filter(function(t){ return t.done; }).length;
+    var pct = Math.round(done / tasks.length * 100);
+    return '<div class="progress-track"><div class="progress-fill" style="width:' + pct + '%"></div></div>';
+  }
+
+  function stripStyle(c){
+    if (c.priority === "high") return ' style="background:var(--pri-high)"';
+    if (c.priority === "med") return ' style="background:var(--pri-med)"';
+    if (c.priority === "low") return ' style="background:var(--pri-low)"';
+    return "";
+  }
+
+  function cardBodyHtml(c, variant){
+    var isDetail = variant === "detail";
+    var tasks = c.tasks || [];
+    var confirming = !!pendingDeleteCardIds[c.id];
+    var tasksHtml = tasks.map(function(t){ return taskHtml(c.id, t); }).join("");
+
+    var footRightHtml = confirming
+      ? '<div class="confirm-row">Удалить карточку?' +
+          '<button class="btn small" type="button" data-action="cancel-delete-card" data-card="' + c.id + '">Отмена</button>' +
+          '<button class="btn small yes" type="button" data-action="confirm-delete-card" data-card="' + c.id + '">Да, удалить</button>' +
+        "</div>"
+      : '<button class="btn ghost small danger-text" type="button" data-action="ask-delete-card" data-card="' + c.id + '">Удалить</button>';
+
+    var metaBits = [];
+    if (c.createdBy) metaBits.push("создал " + esc(c.createdBy));
+    if (c.updatedBy && c.updatedAt) metaBits.push("правки: " + esc(c.updatedBy) + " · " + timeAgo(c.updatedAt));
+
+    var headExtrasHtml = isDetail ? "" :
+      '<button class="icon-btn" type="button" data-action="open-detail" data-card="' + c.id + '" title="Открыть на весь экран">⤢</button>';
+
+    var html = '<div class="card-head">' +
+        '<input class="title-input" type="text" value="' + esc(c.title) + '" data-edit-key="' + c.id + ':title" data-action="edit-title" data-card="' + c.id + '">' +
+        badgeHtml(tasks) +
+        headExtrasHtml +
+      "</div>" +
+      '<div class="meta">' + esc(metaBits.join(" · ")) + "</div>" +
+      progressBarHtml(tasks);
+
+    html += isDetail ? (propGridHtml(c) + tagsEditorHtml(c)) : indicatorRowHtml(c);
+
+    html += '<div class="tasks">' + tasksHtml + "</div>" +
+      '<form class="add-task" data-action="add-task-form" data-card="' + c.id + '">' +
+        '<span class="plus">+</span>' +
+        '<input type="text" placeholder="Добавить пункт…" autocomplete="off">' +
+      "</form>";
+
+    if (isDetail) html += photosHtml(c) + commentsHtml(c) + activityHtml(c);
+
+    var footLeftHtml;
+    if (isDetail){
+      footLeftHtml = '<button class="btn small" type="button" data-action="save-template" data-card="' + c.id + '">💾 Шаблон</button>' +
+        (c.archived
+          ? ('<button class="btn small" type="button" data-action="unarchive-card" data-card="' + c.id + '">↩ Из архива</button>')
+          : ('<button class="btn small" type="button" data-action="archive-card" data-card="' + c.id + '">🗄 В архив</button>')) +
+        '<button class="btn small" type="button" data-action="repeat-card" data-card="' + c.id + '" title="Сбросить пункты и запустить заново">↻ Повторить</button>';
+    } else {
+      footLeftHtml = c.archived
+        ? '<button class="btn small" type="button" data-action="unarchive-card" data-card="' + c.id + '">↩ Из архива</button>'
+        : statusControlsHtml(c);
+    }
+
+    html += '<div class="card-foot"><div class="foot-left">' + footLeftHtml + '</div><div class="foot-right">' + footRightHtml + '</div></div>';
+
+    return html;
+  }
+
+  function cardHtml(c){
+    var cls = "card" +
+      (recentlyCreatedIds[c.id] ? " card-enter" : "") +
+      (!c.archived && isOverdue(c) ? " overdue-glow" : "");
+    return '<div class="' + cls + '" draggable="true" data-card-id="' + c.id + '" data-status="' + (c.status || "todo") + '">' +
+      '<div class="card-strip"' + stripStyle(c) + '></div>' +
+      cardBodyHtml(c, "board") +
+    "</div>";
+  }
+
+  function detailInnerHtml(c){
+    return '<div class="card detail-inner">' +
+      '<div class="card-strip"' + stripStyle(c) + '></div>' +
+      cardBodyHtml(c, "detail") +
+    "</div>";
+  }
+
+  function columnHtml(status, cards){
+    var count = cards.length;
+    var changed = prevColumnCounts.hasOwnProperty(status) && prevColumnCounts[status] !== count;
+    prevColumnCounts[status] = count;
+    var body = count ? cards.map(cardHtml).join("") : ('<div class="column-empty">' + emptyStateHtml("Пусто") + '</div>');
+    return '<div class="column" data-status="' + status + '">' +
+      '<div class="column-head"><h3>' + STATUS_LABELS[status] + '</h3><span class="column-count' + (changed ? ' pulse' : '') + '">' + count + '</span></div>' +
+      body +
+    '</div>';
+  }
+
+  function renderKanbanBoard(){
+    var cards = visibleCards().slice().sort(function(a,b){ return cardOrder(a) - cardOrder(b); });
+    if (!state.cards.length){
+      boardEl.innerHTML = '<div class="empty">' + emptyStateHtml("Пока нет заданий.", true) + '<button class="btn primary" type="button" id="emptyAddBtn">+ Создать первое задание</button></div>';
+      var b = document.getElementById("emptyAddBtn");
+      if (b) b.addEventListener("click", createCard);
+      return;
+    }
+    if (!cards.length){
+      boardEl.innerHTML = '<div class="empty">' + emptyStateHtml("Ничего не найдено по текущим фильтрам.", true) + '</div>';
+      return;
+    }
+    var cols = STATUSES.map(function(s){
+      return columnHtml(s, cards.filter(function(c){ return (c.status || "todo") === s; }));
+    }).join("");
+    boardEl.innerHTML = '<div class="columns">' + cols + '</div>';
+  }
+
+  function renderArchiveBoard(){
+    var cards = archivedCards().filter(cardMatchesFilters).slice().sort(function(a,b){ return (b.updatedAt||0) - (a.updatedAt||0); });
+    if (!cards.length){
+      boardEl.innerHTML = '<div class="empty">' + emptyStateHtml("Архив пуст.", true) + '</div>';
+      return;
+    }
+    boardEl.innerHTML = '<div class="board-list">' + cards.map(cardHtml).join("") + '</div>';
+  }
+
+  function renderBoard(){
+    var captured = captureFocus(boardEl);
+    if (viewMode === "archive") renderArchiveBoard(); else renderKanbanBoard();
+    restoreFocus(boardEl, captured);
+    renderDetail();
+    renderTplPopover();
+    recentlyCreatedIds = {};
+    recentlyToggledIds = {};
+  }
+
+  /* ---------- fullscreen detail view ---------- */
+
+  function openDetail(cardId){
+    activeDetailCardId = cardId;
+    detailVeil.classList.add("show");
+    renderDetail();
+  }
+  function closeDetail(){
+    activeDetailCardId = null;
+    detailVeil.classList.remove("show");
+  }
+  function renderDetail(){
+    if (!activeDetailCardId) return;
+    var c = getCard(activeDetailCardId);
+    if (!c){ closeDetail(); return; }
+    var captured = captureFocus(detailBody);
+    detailBody.innerHTML = detailInnerHtml(c);
+    restoreFocus(detailBody, captured);
+  }
+
+  document.getElementById("detailCloseBtn").addEventListener("click", closeDetail);
+  document.addEventListener("keydown", function(e){
+    if (e.key !== "Escape") return;
+    if (lightboxVeil.classList.contains("show")) closeLightbox();
+    else if (activeDetailCardId) closeDetail();
+  });
+
+  /* ---------- photo lightbox ---------- */
+
+  function openLightbox(src){ if (!src) return; lightboxImg.src = src; lightboxVeil.classList.add("show"); }
+  function closeLightbox(){ lightboxVeil.classList.remove("show"); lightboxImg.src = ""; }
+  lightboxVeil.addEventListener("click", closeLightbox);
+
+  /* ---------- templates: popover + save modal ---------- */
+
+  function renderTplPopover(){
+    if (!state.templates.length){
+      tplPopEl.innerHTML = '<div class="tpl-empty">Нет сохранённых шаблонов. Откройте карточку и нажмите «Сохранить как шаблон».</div>';
+      return;
+    }
+    tplPopEl.innerHTML = state.templates.map(function(tpl){
+      return '<div class="tpl-item">' +
+        '<button class="use" type="button" data-action="use-template" data-value="' + tpl.id + '">' + esc(tpl.name) + '</button>' +
+        '<button class="del" type="button" data-action="delete-template" data-value="' + tpl.id + '" title="Удалить шаблон">×</button>' +
+      '</div>';
+    }).join("");
+  }
+  function openTplPopover(){ tplPopEl.classList.add("show"); renderTplPopover(); }
+  function closeTplPopover(){ tplPopEl.classList.remove("show"); }
+
+  document.getElementById("tplCaretBtn").addEventListener("click", function(e){
+    e.stopPropagation();
+    if (tplPopEl.classList.contains("show")) closeTplPopover(); else openTplPopover();
+  });
+  document.addEventListener("click", function(e){
+    if (tplPopEl.classList.contains("show") && !tplPopEl.contains(e.target) && e.target.id !== "tplCaretBtn") closeTplPopover();
+  });
+  tplPopEl.addEventListener("click", function(e){
+    var t = e.target;
+    var action = t.getAttribute && t.getAttribute("data-action");
+    if (action === "use-template"){
+      var tpl = state.templates.find(function(x){ return x.id === t.getAttribute("data-value"); });
+      if (tpl) createCardFromTemplate(tpl);
+    } else if (action === "delete-template"){
+      deleteTemplate(t.getAttribute("data-value"));
+    }
+  });
+
+  function openTplModal(cardId){
+    tplTargetCardId = cardId;
+    var c = getCard(cardId);
+    tplNameInput.value = c ? c.title : "";
+    tplVeil.classList.add("show");
+    setTimeout(function(){ tplNameInput.focus(); tplNameInput.select(); }, 30);
+  }
+  function closeTplModal(){ tplVeil.classList.remove("show"); tplTargetCardId = null; }
+
+  document.getElementById("tplCancelBtn").addEventListener("click", closeTplModal);
+  document.getElementById("tplSaveBtn").addEventListener("click", function(){
+    var name = tplNameInput.value.trim();
+    if (!name){ tplNameInput.focus(); return; }
+    var c = getCard(tplTargetCardId);
+    if (!c){ closeTplModal(); return; }
+    saveTemplate(name, c.tasks || []);
+    closeTplModal();
+  });
+  tplNameInput.addEventListener("keydown", function(e){ if (e.key === "Enter") document.getElementById("tplSaveBtn").click(); });
+  tplVeil.addEventListener("click", function(e){ if (e.target === tplVeil) closeTplModal(); });
+
+  /* ---------- stats modal ---------- */
+
+  function openStats(){
+    var active = state.cards.filter(function(c){ return !c.archived; });
+    var totalTasks = 0, doneTasks = 0;
+    active.forEach(function(c){ (c.tasks || []).forEach(function(t){ totalTasks++; if (t.done) doneTasks++; }); });
+    var byAssignee = {};
+    active.forEach(function(c){ var who = c.assignee || "Не назначено"; byAssignee[who] = (byAssignee[who] || 0) + 1; });
+    var rows = [
+      ["Всего заданий", active.length],
+      ["Готово", active.filter(function(c){ return (c.status||"todo") === "done"; }).length],
+      ["В работе", active.filter(function(c){ return (c.status||"todo") === "doing"; }).length],
+      ["Не начато", active.filter(function(c){ return (c.status||"todo") === "todo"; }).length],
+      ["Просрочено", active.filter(isOverdue).length],
+      ["Пунктов выполнено", doneTasks + " / " + totalTasks],
+      ["В архиве", archivedCards().length]
+    ];
+    var html = rows.map(function(r){ return '<div class="stat-row"><span>' + r[0] + '</span><b>' + r[1] + '</b></div>'; }).join("");
+    var byAssigneeHtml = Object.keys(byAssignee).sort().map(function(k){
+      return '<div class="stat-row"><span>' + esc(k) + '</span><b>' + byAssignee[k] + '</b></div>';
+    }).join("");
+    document.getElementById("statsBody").innerHTML = html +
+      '<div style="margin-top:12px;margin-bottom:2px;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">По ответственным</div>' +
+      (byAssigneeHtml || '<div class="stat-row"><span>—</span><b></b></div>');
+    document.getElementById("statsVeil").classList.add("show");
+  }
+  document.getElementById("statsBtn").addEventListener("click", openStats);
+  document.getElementById("statsCloseBtn").addEventListener("click", function(){ document.getElementById("statsVeil").classList.remove("show"); });
+  document.getElementById("statsVeil").addEventListener("click", function(e){ if (e.target.id === "statsVeil") document.getElementById("statsVeil").classList.remove("show"); });
+
+  /* ---------- CSV export ---------- */
+
+  function csvEscape(v){
+    var s = String(v == null ? "" : v);
+    if (/[",\n;]/.test(s)) s = '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  }
+
+  async function exportCsv(){
+    var rows = [["Карточка","Статус","Приоритет","Ответственный","Срок","Пункт","Пункт готов","Подпункт","Подпункт готов"]];
+    state.cards.forEach(function(c){
+      var statusLbl = STATUS_LABELS[c.status || "todo"];
+      var priLbl = c.priority ? PRIORITY_LABELS[c.priority] : "";
+      var tasks = c.tasks || [];
+      if (!tasks.length){
+        rows.push([c.title, statusLbl, priLbl, c.assignee || "", c.dueDate || "", "", "", "", ""]);
+      }
+      tasks.forEach(function(t){
+        rows.push([c.title, statusLbl, priLbl, c.assignee || "", c.dueDate || "", t.text, t.done ? "да" : "нет", "", ""]);
+        (t.subtasks || []).forEach(function(s){
+          rows.push([c.title, statusLbl, priLbl, c.assignee || "", c.dueDate || "", t.text, t.done ? "да" : "нет", s.text, s.done ? "да" : "нет"]);
+        });
+      });
+    });
+    var csv = rows.map(function(r){ return r.map(csvEscape).join(";"); }).join("\r\n");
+    var blob = new Blob(["﻿" + csv], { type: "text/csv" });
+    if (window.claude && window.claude.use){
+      try {
+        var downloads = await window.claude.use("downloads");
+        if (downloads){
+          await downloads.save({ filename: "zadaniya.csv", data: blob });
+          return;
+        }
+      } catch (e){}
+    }
+    showTransientError("Экспорт доступен только по ссылке от Claude.");
+  }
+  document.getElementById("exportBtn").addEventListener("click", exportCsv);
+
+  /* ---------- toolbar: search / filters / archive ---------- */
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    searchQuery = e.target.value;
+    renderBoard();
+  });
+  function bindFilterChip(id, key){
+    var el = document.getElementById(id);
+    el.addEventListener("click", function(){
+      filters[key] = !filters[key];
+      el.classList.toggle("active", filters[key]);
+      renderBoard();
+    });
+  }
+  bindFilterChip("filterMine", "mine");
+  bindFilterChip("filterOverdue", "overdue");
+  bindFilterChip("filterUnfinished", "unfinished");
+
+  document.getElementById("archiveToggleBtn").addEventListener("click", function(){
+    var btn = document.getElementById("archiveToggleBtn");
+    viewMode = viewMode === "archive" ? "board" : "archive";
+    btn.classList.toggle("active", viewMode === "archive");
+    btn.textContent = viewMode === "archive" ? "← Доска" : "Архив";
+    renderBoard();
+  });
+
+  /* ---------- drag and drop (kanban) ---------- */
+
+  boardEl.addEventListener("dragstart", function(e){
+    var card = e.target.closest && e.target.closest(".card[data-card-id]");
+    if (!card) return;
+    draggingCardId = card.getAttribute("data-card-id");
+    card.classList.add("dragging");
+    if (e.dataTransfer){
+      e.dataTransfer.effectAllowed = "move";
+      try { e.dataTransfer.setData("text/plain", draggingCardId); } catch (err){}
+    }
+  });
+  function clearDropIndicators(){
+    var marked = boardEl.querySelectorAll(".card.drop-before, .card.drop-after");
+    for (var i = 0; i < marked.length; i++) marked[i].classList.remove("drop-before", "drop-after");
+  }
+
+  boardEl.addEventListener("dragend", function(e){
+    var card = e.target.closest && e.target.closest(".card[data-card-id]");
+    if (card) card.classList.remove("dragging");
+    draggingCardId = null;
+    var overs = boardEl.querySelectorAll(".column.drag-over");
+    for (var i = 0; i < overs.length; i++) overs[i].classList.remove("drag-over");
+    clearDropIndicators();
+  });
+  boardEl.addEventListener("dragover", function(e){
+    var col = e.target.closest && e.target.closest(".column[data-status]");
+    if (!col || !draggingCardId) return;
+    e.preventDefault();
+    if (e.dataTransfer) e.dataTransfer.dropEffect = "move";
+    col.classList.add("drag-over");
+    clearDropIndicators();
+    var cardEl = e.target.closest && e.target.closest(".card[data-card-id]");
+    if (cardEl && cardEl.getAttribute("data-card-id") !== draggingCardId){
+      var rect = cardEl.getBoundingClientRect();
+      var before = (e.clientY - rect.top) < rect.height / 2;
+      cardEl.classList.add(before ? "drop-before" : "drop-after");
+    }
+  });
+  boardEl.addEventListener("dragleave", function(e){
+    var col = e.target.closest && e.target.closest(".column[data-status]");
+    if (col && (!e.relatedTarget || !col.contains(e.relatedTarget))){ col.classList.remove("drag-over"); clearDropIndicators(); }
+  });
+  boardEl.addEventListener("drop", function(e){
+    var col = e.target.closest && e.target.closest(".column[data-status]");
+    if (!col || !draggingCardId) return;
+    e.preventDefault();
+    col.classList.remove("drag-over");
+    clearDropIndicators();
+    handleCardDrop(draggingCardId, col.getAttribute("data-status"), e);
+    draggingCardId = null;
+  });
+
+  /* ---------- delegated events (shared by board + fullscreen view) ---------- */
+
+  function handleContainerClick(e){
+    var t = e.target;
+    var action = t.getAttribute && t.getAttribute("data-action");
+    if (!action) return;
+    var cardId = t.getAttribute("data-card");
+    if (action === "ask-delete-card"){ pendingDeleteCardIds[cardId] = true; renderBoard(); }
+    else if (action === "cancel-delete-card"){ delete pendingDeleteCardIds[cardId]; renderBoard(); }
+    else if (action === "confirm-delete-card"){ delete pendingDeleteCardIds[cardId]; deleteCard(cardId); if (activeDetailCardId === cardId) closeDetail(); }
+    else if (action === "delete-task"){ deleteTask(cardId, t.getAttribute("data-task")); }
+    else if (action === "delete-subtask"){ deleteSubtask(cardId, t.getAttribute("data-task"), t.getAttribute("data-sub")); }
+    else if (action === "open-detail"){ openDetail(cardId); }
+    else if (action === "status-prev"){ moveStatusDelta(cardId, -1); }
+    else if (action === "status-next"){ moveStatusDelta(cardId, 1); }
+    else if (action === "set-status"){ moveToStatus(cardId, t.getAttribute("data-value")); }
+    else if (action === "set-priority"){ setPriority(cardId, t.getAttribute("data-value")); }
+    else if (action === "remove-tag"){ removeTag(cardId, t.getAttribute("data-value")); }
+    else if (action === "remove-photo"){ removePhoto(cardId, parseInt(t.getAttribute("data-value"), 10)); }
+    else if (action === "archive-card"){ setArchived(cardId, true); }
+    else if (action === "unarchive-card"){ setArchived(cardId, false); }
+    else if (action === "repeat-card"){ repeatCard(cardId); }
+    else if (action === "save-template"){ openTplModal(cardId); }
+    else if (action === "open-photo"){ openLightbox(t.getAttribute("src")); }
+  }
+
+  function handleContainerChange(e){
+    var t = e.target;
+    var action = t.getAttribute && t.getAttribute("data-action");
+    var cardId = t.getAttribute && t.getAttribute("data-card");
+    if (action === "toggle-task") toggleTask(cardId, t.getAttribute("data-task"));
+    else if (action === "toggle-subtask") toggleSubtask(cardId, t.getAttribute("data-task"), t.getAttribute("data-sub"));
+    else if (action === "set-assignee") setAssignee(cardId, t.value);
+    else if (action === "set-due") setDueDate(cardId, t.value);
+    else if (action === "set-repeat") setRepeat(cardId, t.value);
+    else if (action === "add-photo") handlePhotoInput(cardId, t);
+  }
+
+  function handleContainerFocusOut(e){
+    var t = e.target;
+    var action = t.getAttribute && t.getAttribute("data-action");
+    if (action === "edit-title") setTitle(t.getAttribute("data-card"), t.value);
+    else if (action === "edit-task") editTaskText(t.getAttribute("data-card"), t.getAttribute("data-task"), t.value);
+    else if (action === "edit-subtask") editSubtaskText(t.getAttribute("data-card"), t.getAttribute("data-task"), t.getAttribute("data-sub"), t.value);
+  }
+
+  function handleContainerKeyDown(e){
+    if (e.key !== "Enter") return;
+    var t = e.target;
+    var action = t.getAttribute && t.getAttribute("data-action");
+    if (action === "edit-title" || action === "edit-task" || action === "edit-subtask") t.blur();
+  }
+
+  function handleContainerSubmit(e){
+    var form = e.target;
+    var action = form.getAttribute("data-action");
+    if (action !== "add-task-form" && action !== "add-subtask-form" && action !== "add-tag-form" && action !== "add-comment-form") return;
+    e.preventDefault();
+    var container = detailBody.contains(form) ? detailBody : boardEl;
+    var input = form.querySelector("input[type=text]");
+    var cardId = form.getAttribute("data-card");
+    var taskId = form.getAttribute("data-task");
+    var value = input.value;
+    var selector;
+    if (action === "add-task-form"){
+      addTask(cardId, value);
+      selector = 'form[data-action="add-task-form"][data-card="' + cardId + '"] input[type=text]';
+    } else if (action === "add-subtask-form"){
+      addSubtask(cardId, taskId, value);
+      selector = 'form[data-action="add-subtask-form"][data-card="' + cardId + '"][data-task="' + taskId + '"] input[type=text]';
+    } else if (action === "add-tag-form"){
+      addTag(cardId, value);
+      selector = 'form[data-action="add-tag-form"][data-card="' + cardId + '"] input[type=text]';
+    } else {
+      addComment(cardId, value);
+      selector = 'form[data-action="add-comment-form"][data-card="' + cardId + '"] input[type=text]';
+    }
+    setTimeout(function(){
+      var el = container.querySelector(selector);
+      if (el) el.focus();
+    }, 0);
+  }
+
+  [boardEl, detailBody].forEach(function(el){
+    el.addEventListener("click", handleContainerClick);
+    el.addEventListener("change", handleContainerChange);
+    el.addEventListener("focusout", handleContainerFocusOut);
+    el.addEventListener("keydown", handleContainerKeyDown);
+    el.addEventListener("submit", handleContainerSubmit);
+  });
+
+  document.getElementById("addCardBtn").addEventListener("click", createCard);
+
+  /* ---------- init ---------- */
+
+  function subscribeCards(){
+    db.collection(CARDS_COL).orderBy("updatedAt", "desc").onSnapshot(function(snap){
+      state.cards = snap.docs.map(function(d){ return Object.assign({ id: d.id }, d.data()); });
+      renderBoard();
+    }, function(){ showTransientError("Потеряна связь с общим хранилищем, пробуем восстановить…"); });
+  }
+  function subscribeMembers(){
+    db.collection(MEMBERS_COL).onSnapshot(function(snap){
+      state.members = snap.docs.map(function(d){ return Object.assign({ id: d.id }, d.data()); }).sort(function(a,b){ return (a.joinedAt||0) - (b.joinedAt||0); });
+      renderRoster();
+    });
+  }
+  function subscribeTemplates(){
+    db.collection(TEMPLATES_COL).onSnapshot(function(snap){
+      state.templates = snap.docs.map(function(d){ return Object.assign({ id: d.id }, d.data()); }).sort(function(a,b){ return (a.createdAt||0) - (b.createdAt||0); });
+      renderTplPopover();
+    });
+  }
+
+  async function init(){
+    whoLbl.textContent = currentName || "…";
+    try {
+      if (window.claude && window.claude.use) db = await window.claude.use("db");
+    } catch(e){ db = null; }
+
+    if (db){
+      mode = "db";
+      subscribeCards();
+      subscribeMembers();
+      subscribeTemplates();
+    } else {
+      mode = "local";
+      modeBanner.classList.add("show");
+      loadLocalCards();
+      loadLocalTemplates();
+      renderBoard();
+      renderRoster();
+      renderTplPopover();
+    }
+
+    if (!currentName) openNameModal(""); else touchMembership();
+  }
+
+  initParticles();
+  init();
+})();
+</script>
+
+</body>
+</html>
