@@ -422,6 +422,8 @@
   <div class="detail-scroll"><div id="detailBody"></div></div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore-compat.js"></script>
 <script>
 (function(){
   "use strict";
@@ -433,6 +435,15 @@
   var STATUS_LABELS = { todo: "Не начато", doing: "В работе", done: "Готово" };
   var PRIORITY_LABELS = { low: "Низкий", med: "Средний", high: "Высокий" };
   var MAX_PHOTOS = 3, PHOTO_MAX_DIM = 480, PHOTO_QUALITY = 0.5;
+
+  var firebaseConfig = {
+    apiKey: "AIzaSyCtzkqH0BGGYWriYkqcwnFL0FC4rWTOnH0",
+    authDomain: "zadaniya-87f0b.firebaseapp.com",
+    projectId: "zadaniya-87f0b",
+    storageBucket: "zadaniya-87f0b.firebasestorage.app",
+    messagingSenderId: "968649586797",
+    appId: "1:968649586797:web:e699df3ac2977e2882e764"
+  };
 
   var db = null;
   var mode = "loading"; // loading | db | local
@@ -1748,6 +1759,15 @@
     try {
       if (window.claude && window.claude.use) db = await window.claude.use("db");
     } catch(e){ db = null; }
+
+    if (!db){
+      try {
+        if (window.firebase && firebaseConfig && firebaseConfig.apiKey){
+          if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+          db = firebase.firestore();
+        }
+      } catch(e){ db = null; }
+    }
 
     if (db){
       mode = "db";
